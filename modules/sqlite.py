@@ -76,6 +76,13 @@ except:
 # if add_column("count_product", type_column="INTEGER",name_table=f"List_products")=="Error":
 #     m_data.count=get_value(column= "count_product",name_table="list_products")
 
+cursor.execute(f"CREATE TABLE IF NOT EXISTS Basket (INTEGER PRIMARY KEY,id)")
+add_column("chat_id","TEXT","Basket")
+add_column("product","TEXT","Basket")
+add_column("email","TEXT","Basket")
+add_column("phone","TEXT","Basket")
+add_column("name","TEXT","Basket")
+add_column("count","INTEGER","Basket")
 # add_product("burger","bugrer","buburger")
 # get_value(column="product_1",name_table="List_products")
 print(get_value(column="count_product",name_table="List_products"),132)

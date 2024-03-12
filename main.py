@@ -436,6 +436,16 @@ async def call_back(callback:aiogram.types.callback_query.CallbackQuery):#
                     ],
                     name_table=name_table
                 )
+                m_sqlite.set_value(
+                    ("chat_id","count","product",'email','phone',"name"),
+                    [callback.from_user.id,
+                    int(data[1]),
+                    data[2],
+                    m_data.users[f'{callback.from_user.id}']['email'],
+                    m_data.users[f'{callback.from_user.id}']['phone'],
+                    m_data.users[f'{callback.from_user.id}']['username']],
+                    "Basket" 
+                    )
                 m_sqlite.data.commit()
                 await message.edit_reply_markup(callback.inline_message_id,inline_keyboard)
             except:
@@ -446,8 +456,11 @@ async def call_back(callback:aiogram.types.callback_query.CallbackQuery):#
             inline_keyboard.inline_keyboard[0][0].callback_data+=" "+data[1]
             await m_data.bot.send_photo(chat_id=callback.from_user.id,photo=m_sqlite.get_value("path",data[1])[-1][-1],reply_markup=inline_keyboard)
         elif "INFO" in callback.data:
-            data=callback.message.reply_markup.inline_keyboard[0][0].callback_data.split(" ")[1]
-            text=f"Опис продукту {data}:\n\t"+m_sqlite.get_value("description",data)[-1][-1]
+            data=callback.message.reply_markup.inline_keyboard[0][0].callback_data.split(" ")[1].split("_")
+            data_1='_'.join(data)
+            del data[0]       
+            
+            text=f"Опис продукту {'_'.join(data)}:\n\t"+m_sqlite.get_value("description",data_1)[-1][-1]
             await m_data.bot.send_message(chat_id=callback.from_user.id,text=text)
     elif callback.from_user.id==m_data.moderator_id:
         
